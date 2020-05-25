@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class Snakes extends JFrame {
     /**
-     * @author Moh Mustaghfirin Al Farizi A11201811347
      */
     private static final long serialVersionUID = 4686539811470774590L;
     static JFrame frame;
