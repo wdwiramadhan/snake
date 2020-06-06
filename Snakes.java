@@ -11,13 +11,14 @@ public class Snakes  {
     private JLabel labeltime;
     private Uler uler; //class uler ng panel utama play 
     private int hh,mm,ss;//kanggo angka label time
+    private int score;
     private String text; //Kanggo set label time
     private final int B_WIDTH = 430;
     private final int B_HEIGHT = 350;
     private final int DOT_SIZE = 10;
     private final int ALL_DOTS = 1505;
     private final int RAND_POS = 10;
-    private final int DELAY = 100;
+    private final int DELAY = 500;
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
     private int dots;
@@ -85,6 +86,7 @@ public class Snakes  {
                     uler.initGame();
                     hh=0;mm=0;ss=0;
                     
+                    uler.setFocusable(true);
                     labeltime.setText("Time  = 00:00:00");
                     dtk.start();
                 } 
@@ -170,8 +172,10 @@ public class Snakes  {
         btnleft.addActionListener(new ButtonListener());
         btnright.addActionListener(new ButtonListener());
         //tambah uler ng tengah
-        snakesPanel.setPreferredSize(new Dimension(300, 300));
         uler=new Uler();
+        uler.addKeyListener(new TAdapter());
+        
+        uler.setFocusable(true);
         snakesPanel.add(uler);
         //tambah panel ngisor
         panelplay.add(statusPanel,BorderLayout.NORTH);
@@ -186,10 +190,8 @@ public class Snakes  {
             initBoard();
         }
         private void initBoard() {
-            addKeyListener(new TAdapter());
             setBackground(Color.black);
-            setFocusable(true);
-            requestFocus();
+            // requestFocus();
             setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
             loadImages();
         }
@@ -197,10 +199,10 @@ public class Snakes  {
         private void loadImages() {
             ImageIcon iid = new ImageIcon("dot.png");
             ball = iid.getImage();
-            ImageIcon iia = new ImageIcon("apple.png");
-            apple = iia.getImage();
+            // ImageIcon iia = new ImageIcon("apple.png");
             ImageIcon iih = new ImageIcon("head.png");
             head = iih.getImage();
+            apple = iih.getImage();
         }
         //mulai game
         private void initGame() {
@@ -225,12 +227,13 @@ public class Snakes  {
                     if (z == 0) {//draw ndas
                         g.drawImage(head, x[z], y[z], this);
                     } 
-                     else if (z==dots-1) {//draw buntut tok
+                     else {
                         g.drawImage(ball, x[z], y[z], this);
                     }
                 }
                 Toolkit.getDefaultToolkit().sync();
-            } else {
+            } 
+            else {
                 gameOver(g);
             }
         }
@@ -246,7 +249,8 @@ public class Snakes  {
         private void checkApple() {
             if ((x[0] == apple_x) && (y[0] == apple_y)) {
                 dots++;
-                // labelscore.setText("Score = "+(dots-3));
+                score=(dots-3);
+                labelscore.setText("Score = "+score);
                 locateApple();
             }
         }
@@ -266,16 +270,16 @@ public class Snakes  {
                     inGame = false;
                 }
             }
-            // if (y[0] >= B_HEIGHT) inGame = false;
-            // if (y[0] < 0) inGame = false;
-            // if (x[0] >= B_WIDTH) inGame = false;
-            // if (x[0] < 0) inGame = false;
+            if (y[0] >= B_HEIGHT) inGame = false;
+            if (y[0] < 0) inGame = false;
+            if (x[0] >= B_WIDTH) inGame = false;
+            if (x[0] < 0) inGame = false;
             
             //Free mode tembus tembok
-            if (y[0] >= B_HEIGHT) y[0]=0;
-            if (y[0] < 0) y[0]=B_HEIGHT-1;
-            if (x[0] >= B_WIDTH) x[0]=0;
-            if (x[0] < 0) x[0]=B_WIDTH-1;
+            // if (y[0] >= B_HEIGHT-9) y[0]=0;
+            // if (y[0] < 0) y[0]=B_HEIGHT-9;
+            // if (x[0] >= B_WIDTH-9) x[0]=0;
+            // if (x[0] < 0) x[0]=B_WIDTH-9;
             if (!inGame) timer.stop();
         }
         //Random pakanan
@@ -295,34 +299,34 @@ public class Snakes  {
             repaint();
         }
         //Key adapter iseh not respon
-        private class TAdapter extends KeyAdapter {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int key = e.getKeyCode();
-                if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
-                    leftDirection = true;
-                    upDirection = false;
-                    downDirection = false;
-                }
-                if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
-                    rightDirection = true;
-                    upDirection = false;
-                    downDirection = false;
-                }
-                if ((key == KeyEvent.VK_UP) && (!downDirection)) {
-                    upDirection = true;
-                    rightDirection = false;
-                    leftDirection = false;
-                }
-                if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
-                    downDirection = true;
-                    rightDirection = false;
-                    leftDirection = false;
-                }
+    }
+    
+    
+    class TAdapter extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            int key = e.getKeyCode();
+            if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
+                leftDirection = true;
+                upDirection = false;
+                downDirection = false;
+            }
+            if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
+                rightDirection = true;
+                upDirection = false;
+                downDirection = false;
+            }
+            if ((key == KeyEvent.VK_UP) && (!downDirection)) {
+                upDirection = true;
+                rightDirection = false;
+                leftDirection = false;
+            }
+            if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
+                downDirection = true;
+                rightDirection = false;
+                leftDirection = false;
             }
         }
-       
-        
     }
     //llstener menu utama 2 play
     public class ButtonListener implements ActionListener{
