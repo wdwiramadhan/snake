@@ -38,6 +38,8 @@ public class Snakes  {
         frame=new JFrame();
         CreateMenu();
         CreatePlay();
+        frame.addKeyListener(new TAdapter());
+        frame.setFocusable(true);
         frame.setTitle("Uler");
         frame.setLocationRelativeTo(null); 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,6 +128,7 @@ public class Snakes  {
         labeltime = new JLabel ("Time  = 00:00:00");
         labeltime.setHorizontalAlignment(SwingConstants.RIGHT);
         btnpause=new JButton("PAUSE");
+        btnpause.setFocusable(false);
         statusPanel.setLayout(new GridLayout(1,3));
         statusPanel.add(labelscore);
         statusPanel.add(btnpause);
@@ -167,15 +170,16 @@ public class Snakes  {
         btnPanelplay.add(btndown,BorderLayout.SOUTH);
         btnPanelplay.add(btnleft,BorderLayout.WEST);
         btnPanelplay.add(btnright,BorderLayout.EAST);
+        btnup.setFocusable(false);
+        btndown.setFocusable(false);
+        btnleft.setFocusable(false);
+        btnright.setFocusable(false);
         btnup.addActionListener(new ButtonListener());
         btndown.addActionListener(new ButtonListener());
         btnleft.addActionListener(new ButtonListener());
         btnright.addActionListener(new ButtonListener());
         //tambah uler ng tengah
         uler=new Uler();
-        uler.addKeyListener(new TAdapter());
-        
-        uler.setFocusable(true);
         snakesPanel.add(uler);
         //tambah panel ngisor
         panelplay.add(statusPanel,BorderLayout.NORTH);
@@ -191,7 +195,6 @@ public class Snakes  {
         }
         private void initBoard() {
             setBackground(Color.black);
-            // requestFocus();
             setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
             loadImages();
         }
@@ -298,7 +301,6 @@ public class Snakes  {
             }
             repaint();
         }
-        //Key adapter iseh not respon
     }
     
     
@@ -360,7 +362,6 @@ public class Snakes  {
                         labeltime.setText("Time  = 00:00:00");
                         dtk.start();
                         uler.initGame();
-                        
                     }
                 });
                 btnresume.addActionListener(new ActionListener(){
