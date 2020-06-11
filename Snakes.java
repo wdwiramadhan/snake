@@ -1,22 +1,25 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Snakes  {
+public class Snakes {
     static JFrame frame;
-    private JPanel panelmenu,panelplay,panelabout,panelrule,panelpause; 
-    private JButton btnplay,rule,about;
-    private JButton btnup,btndown,btnleft,btnright,btnpause,btntomenu,btnreset,btnresume;
+    private JPanel panelmenu, panelplay, panelabout, panelrule, panelpause;
+    private JButton btnplay, rule, about;
+    private JButton btnup, btndown, btnleft, btnright, btnpause, btntomenu, btnreset, btnresume;
     private JLabel labelscore;
     private JLabel labeltime;
-    private JLabel hs;//label highscore
-    private Uler uler; //class uler ng panel utama play 
-    private int hh,mm,ss;//kanggo angka label time
+    private JLabel hs;// label highscore
+    private Uler uler; // class uler ng panel utama play
+    private int hh, mm, ss;// kanggo angka label time
     private int score;
-    private int highscore=0;
-    private String text; //Kanggo set label time
+    private int highscore = 0;
+    private String text; // Kanggo set label time
     private final int B_WIDTH = 430;
     private final int B_HEIGHT = 350;
     private final int DOT_SIZE = 10;
@@ -33,13 +36,13 @@ public class Snakes  {
     private boolean upDirection = false;
     private boolean downDirection = false;
     private boolean inGame = false;
-    private Timer timer,dtk;
+    private Timer timer, dtk;
     private Image ball;
     private Image pakan;
     private Image head;
 
     public Snakes() {
-        frame=new JFrame();
+        frame = new JFrame();
         CreateMenu();
         CreatePlay();
         CreateRule();
@@ -47,21 +50,24 @@ public class Snakes  {
         frame.addKeyListener(new TAdapter());
         frame.setFocusable(true);
         frame.setTitle("Uler");
-        frame.setLocationRelativeTo(null); 
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(450, 500);
         frame.setVisible(true);
         frame.setContentPane(panelmenu);
         frame.repaint();
-        frame.revalidate();          
+        frame.revalidate();
     }
-    public void CreateRule(){
-        panelrule=new JPanel();
+
+    public void CreateRule() {
+        panelrule = new JPanel();
         panelrule.setLayout(new BorderLayout());
-        JLabel l = new JLabel("Rules",SwingConstants.CENTER); 
-        JLabel desc = new JLabel("<html><div style='text-align: center;'>This game has some rules there are : </div><br/>1.<br/>2.<br/>3.<br/>4.<br/>5.<br/></html>", SwingConstants.CENTER); 
-        JButton back=new JButton("Back to Main Menu");
-        back.addActionListener(new ActionListener(){
+        JLabel l = new JLabel("Rules", SwingConstants.CENTER);
+        JLabel desc = new JLabel(
+                "<html><div style='text-align: center;'>This game has some rules there are : </div><br/>1.<br/>2.<br/>3.<br/>4.<br/>5.<br/></html>",
+                SwingConstants.CENTER);
+        JButton back = new JButton("Back to Main Menu");
+        back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setContentPane(panelmenu);
@@ -69,19 +75,21 @@ public class Snakes  {
                 frame.revalidate();
             }
         });
-        panelrule.add(l,BorderLayout.NORTH); 
-        panelrule.add(desc,BorderLayout.CENTER);
-        panelrule.add(back,BorderLayout.SOUTH);
-        panelrule.setVisible(true); 
+        panelrule.add(l, BorderLayout.NORTH);
+        panelrule.add(desc, BorderLayout.CENTER);
+        panelrule.add(back, BorderLayout.SOUTH);
+        panelrule.setVisible(true);
     }
-    
-    public void CreateAbout(){
-        panelabout=new JPanel();
+
+    public void CreateAbout() {
+        panelabout = new JPanel();
         panelabout.setLayout(new BorderLayout());
         JLabel l = new JLabel("About Us", SwingConstants.CENTER);
-        JLabel desc = new JLabel("<html><div style='text-align: center;'>This project is created by Tim 4<br/><br/>Analyst<br/>A11.2018.11359 Wahid Amaludin<br/>A11.2018.11390 Muhamad Gani Damar Mulya<br/><br/>GUI Designer<br/>A11.2018.11368 Andika Suriya Bagus Saputra<br/>A11.2018.11366 Muhamad Baharudin Yusuf<br/><br/>Programmer<br/>A11.2018.11347 Moh. Mustaghfirin Al Farizi<br/>A11.2018.11396 Wahyu Dwi Ramadhan<br/><br/>Documentator<br/>A11.2018.11409 Muhammad Farhan Azky<br/>A11.2018.11270 Rosa Paramitha</div></html>", SwingConstants.CENTER); 
-        JButton back=new JButton("Back to Main Menu");
-        back.addActionListener(new ActionListener(){
+        JLabel desc = new JLabel(
+                "<html><div style='text-align: center;'>This project is created by Tim 4<br/><br/>Analyst<br/>A11.2018.11359 Wahid Amaludin<br/>A11.2018.11390 Muhamad Gani Damar Mulya<br/><br/>GUI Designer<br/>A11.2018.11368 Andika Suriya Bagus Saputra<br/>A11.2018.11366 Muhamad Baharudin Yusuf<br/><br/>Programmer<br/>A11.2018.11347 Moh. Mustaghfirin Al Farizi<br/>A11.2018.11396 Wahyu Dwi Ramadhan<br/><br/>Documentator<br/>A11.2018.11409 Muhammad Farhan Azky<br/>A11.2018.11270 Rosa Paramitha</div></html>",
+                SwingConstants.CENTER);
+        JButton back = new JButton("Back to Main Menu");
+        back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setContentPane(panelmenu);
@@ -89,18 +97,28 @@ public class Snakes  {
                 frame.revalidate();
             }
         });
-        panelabout.add(l,BorderLayout.NORTH); 
-        panelabout.add(desc,BorderLayout.CENTER); 
-        panelabout.add(back,BorderLayout.SOUTH);
-        panelabout.setVisible(true); 
+        panelabout.add(l, BorderLayout.NORTH);
+        panelabout.add(desc, BorderLayout.CENTER);
+        panelabout.add(back, BorderLayout.SOUTH);
+        panelabout.setVisible(true);
     }
-    //Panel utama 1 Menu utama 
-    public void CreateMenu(){
-        panelmenu=new JPanel();
+
+    // Panel utama 1 Menu utama
+    public void CreateMenu() {
+        panelmenu = new JPanel();
         panelmenu.setLayout(new FlowLayout());
         JPanel imgJPanel = new JPanel();
         JPanel btnPanel = new JPanel();
         JPanel southPanel = new JPanel();
+        // panel gambar
+        JLabel picLabel = new JLabel();
+        try {
+            Image img = ImageIO.read(getClass().getResource("gambarutama.png"));
+            picLabel.setIcon(new ImageIcon(img));
+          } catch (Exception ex) {
+            System.out.println(ex);
+          }
+        imgJPanel.add(picLabel);
         //Panel tengah
         hs=new JLabel("<html>Welcome to Snake<br/>Highscore = "+highscore+"</html>",SwingConstants.CENTER);
         btnPanel.setLayout(new GridBagLayout());  
