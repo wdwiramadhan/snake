@@ -11,9 +11,11 @@ public class Snakes  {
     private JButton btnup,btndown,btnleft,btnright,btnpause,btntomenu,btnreset,btnresume;
     private JLabel labelscore;
     private JLabel labeltime;
+    private JLabel hs;//label highscore
     private Uler uler; //class uler ng panel utama play 
     private int hh,mm,ss;//kanggo angka label time
     private int score;
+    private int highscore=0;
     private String text; //Kanggo set label time
     private final int B_WIDTH = 430;
     private final int B_HEIGHT = 350;
@@ -100,7 +102,7 @@ public class Snakes  {
         JPanel btnPanel = new JPanel();
         JPanel southPanel = new JPanel();
         //Panel tengah
-        JLabel hs=new JLabel("Welcome to Snake");
+        hs=new JLabel("<html>Welcome to Snake<br/>Highscore = "+highscore+"</html>",SwingConstants.CENTER);
         btnPanel.setLayout(new GridBagLayout());  
         btnplay=new JButton();
         rule=new JButton();
@@ -330,6 +332,11 @@ public class Snakes  {
                 dots++;
                 score=(dots-3);
                 labelscore.setText(" = "+score);
+                if(highscore<=score){
+                    highscore=score;
+                    hs.setText("<html>Welcome to Snake<br/>Highscore = "+highscore+"</html>");
+                    System.out.println(highscore);
+                }
                 locatepakan();
             }
         }
