@@ -1,10 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Snakes  {
     static JFrame frame;
-    private JPanel panelmenu,panelplay; 
+    private JPanel panelmenu,panelplay,panelabout,panelrule,panelpause; 
     private JButton btnplay,rule,about;
     private JButton btnup,btndown,btnleft,btnright,btnpause,btntomenu,btnreset,btnresume;
     private JLabel labelscore;
@@ -22,8 +24,8 @@ public class Snakes  {
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
     private int dots;
-    private int apple_x;
-    private int apple_y;
+    private int pakan_x;
+    private int pakan_y;
     private boolean leftDirection = false;
     private boolean rightDirection = true;
     private boolean upDirection = false;
@@ -31,13 +33,15 @@ public class Snakes  {
     private boolean inGame = false;
     private Timer timer,dtk;
     private Image ball;
-    private Image apple;
+    private Image pakan;
     private Image head;
 
     public Snakes() {
         frame=new JFrame();
         CreateMenu();
         CreatePlay();
+        CreateRule();
+        CreateAbout();
         frame.addKeyListener(new TAdapter());
         frame.setFocusable(true);
         frame.setTitle("Uler");
@@ -49,6 +53,45 @@ public class Snakes  {
         frame.repaint();
         frame.revalidate();          
     }
+    public void CreateRule(){
+        panelrule=new JPanel();
+        panelrule.setLayout(new BorderLayout());
+        JLabel l = new JLabel("Rules",SwingConstants.CENTER); 
+        JLabel desc = new JLabel("<html><div style='text-align: center;'>This game has some rules there are : </div><br/>1.<br/>2.<br/>3.<br/>4.<br/>5.<br/></html>", SwingConstants.CENTER); 
+        JButton back=new JButton("Back to Main Menu");
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(panelmenu);
+                frame.repaint();
+                frame.revalidate();
+            }
+        });
+        panelrule.add(l,BorderLayout.NORTH); 
+        panelrule.add(desc,BorderLayout.CENTER);
+        panelrule.add(back,BorderLayout.SOUTH);
+        panelrule.setVisible(true); 
+    }
+    
+    public void CreateAbout(){
+        panelabout=new JPanel();
+        panelabout.setLayout(new BorderLayout());
+        JLabel l = new JLabel("About Us", SwingConstants.CENTER);
+        JLabel desc = new JLabel("<html><div style='text-align: center;'>This project is created by Tim 4<br/><br/>Analyst<br/>A11.2018.11359 Wahid Amaludin<br/>A11.2018.11390 Muhamad Gani Damar Mulya<br/><br/>GUI Designer<br/>A11.2018.11368 Andika Suriya Bagus Saputra<br/>A11.2018.11366 Muhamad Baharudin Yusuf<br/><br/>Programmer<br/>A11.2018.11347 Moh. Mustaghfirin Al Farizi<br/>A11.2018.11396 Wahyu Dwi Ramadhan<br/><br/>Documentator<br/>A11.2018.11409 Muhammad Farhan Azky<br/>A11.2018.11270 Rosa Paramitha</div></html>", SwingConstants.CENTER); 
+        JButton back=new JButton("Back to Main Menu");
+        back.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(panelmenu);
+                frame.repaint();
+                frame.revalidate();
+            }
+        });
+        panelabout.add(l,BorderLayout.NORTH); 
+        panelabout.add(desc,BorderLayout.CENTER); 
+        panelabout.add(back,BorderLayout.SOUTH);
+        panelabout.setVisible(true); 
+    }
     //Panel utama 1 Menu utama 
     public void CreateMenu(){
         panelmenu=new JPanel();
@@ -57,11 +100,21 @@ public class Snakes  {
         JPanel btnPanel = new JPanel();
         JPanel southPanel = new JPanel();
         //Panel tengah
-        JLabel hs=new JLabel("Highscore = 0000000");
+        JLabel hs=new JLabel("Welcome to Snake");
         btnPanel.setLayout(new GridBagLayout());  
-        btnplay=new JButton("Play");
-        rule=new JButton("Rule");
-        about=new JButton("About");
+        btnplay=new JButton();
+        rule=new JButton();
+        about=new JButton();
+        try {
+            Image img = ImageIO.read(getClass().getResource("play.png"));
+            btnplay.setIcon(new ImageIcon(img));
+            img = ImageIO.read(getClass().getResource("rule.png"));
+            rule.setIcon(new ImageIcon(img));
+            img = ImageIO.read(getClass().getResource("about.png"));
+            about.setIcon(new ImageIcon(img));
+          } catch (Exception ex) {
+            System.out.println(ex);
+          }
         btnplay.setPreferredSize(new Dimension(100,30));
         rule.setPreferredSize(new Dimension(100,30));
         about.setPreferredSize(new Dimension(100,30));
@@ -89,30 +142,24 @@ public class Snakes  {
                     hh=0;mm=0;ss=0;
                     
                     uler.setFocusable(true);
-                    labeltime.setText("Time  = 00:00:00");
+                    labeltime.setText(" = 00:00:00");
                     dtk.start();
                 } 
         });
         rule.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                    JDialog d = new JDialog(frame,"Rule"); 
-                    d.setLocationRelativeTo(null);
-                    JLabel l = new JLabel("Rule........."); 
-                    d.add(l); 
-                    d.setSize(260,190); 
-                    d.setVisible(true); 
+                    frame.setContentPane(panelrule);
+                    frame.repaint();
+                    frame.revalidate();
                 } 
         });
         about.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                    JDialog d = new JDialog(frame,"About"); 
-                    d.setLocationRelativeTo(null);
-                    JLabel l = new JLabel("About.........");
-                    d.add(l); 
-                    d.setSize(260,190); 
-                    d.setVisible(true); 
+                    frame.setContentPane(panelabout);
+                    frame.repaint();
+                    frame.revalidate();
                 } 
         });
     }
@@ -124,10 +171,19 @@ public class Snakes  {
         JPanel snakesPanel = new JPanel();
         JPanel btnPanelplay = new JPanel();
         //Panel duwur
-        labelscore = new JLabel("Score = 00000000");
-        labeltime = new JLabel ("Time  = 00:00:00");
+        labelscore = new JLabel(" = 0");
+        labelscore.setIcon(new ImageIcon("score.png"));
+        labeltime = new JLabel (" = 00:00:00");
+        labeltime.setIcon(new ImageIcon("time.png"));
         labeltime.setHorizontalAlignment(SwingConstants.RIGHT);
-        btnpause=new JButton("PAUSE");
+        btnpause=new JButton();
+        btnpause.setActionCommand("PAUSE");
+        try {
+            Image img = ImageIO.read(getClass().getResource("pause.png"));
+            btnpause.setIcon(new ImageIcon(img));
+          } catch (Exception ex) {
+            System.out.println(ex);
+          }
         btnpause.setFocusable(false);
         statusPanel.setLayout(new GridLayout(1,3));
         statusPanel.add(labelscore);
@@ -156,20 +212,39 @@ public class Snakes  {
                 if(ss<10) text=text+":0"+ss;
                 else text=text+":"+ss;
                 // text=text+">";
-                labeltime.setText("Time  = "+text);
+                labeltime.setText(" = "+text);
             }
         });
         dtk.start();
         //Panel ngisor
-        btnup=new JButton("UP");
-        btndown=new JButton("DOWN");
-        btnleft=new JButton("LEFT");
-        btnright=new JButton("RIGHT");
+        btnup=new JButton();
+        btndown=new JButton();
+        btnleft=new JButton();
+        btnright=new JButton();
+        btnup.setActionCommand("UP");
+        btndown.setActionCommand("DOWN");
+        btnleft.setActionCommand("LEFT");
+        btnright.setActionCommand("RIGHT");
+        try {
+            Image img = ImageIO.read(getClass().getResource("up.png"));
+            btnup.setIcon(new ImageIcon(img));
+            img = ImageIO.read(getClass().getResource("down.png"));
+            btndown.setIcon(new ImageIcon(img));
+            img = ImageIO.read(getClass().getResource("left.png"));
+            btnleft.setIcon(new ImageIcon(img));
+            img = ImageIO.read(getClass().getResource("right.png"));
+            btnright.setIcon(new ImageIcon(img));
+          } catch (Exception ex) {
+            System.out.println(ex);
+          }
+        JPanel btncenter=new JPanel();
+        btncenter.setLayout(new GridLayout(1,2));
         btnPanelplay.setLayout(new BorderLayout());
+        btncenter.add(btnleft);
+        btncenter.add(btnright);
         btnPanelplay.add(btnup,BorderLayout.NORTH);
+        btnPanelplay.add(btncenter,BorderLayout.CENTER);
         btnPanelplay.add(btndown,BorderLayout.SOUTH);
-        btnPanelplay.add(btnleft,BorderLayout.WEST);
-        btnPanelplay.add(btnright,BorderLayout.EAST);
         btnup.setFocusable(false);
         btndown.setFocusable(false);
         btnleft.setFocusable(false);
@@ -187,6 +262,8 @@ public class Snakes  {
         panelplay.add(btnPanelplay,BorderLayout.SOUTH);
     }
     
+    
+    
     class Uler extends JPanel implements ActionListener {
         
         public Uler() {
@@ -194,18 +271,17 @@ public class Snakes  {
             initBoard();
         }
         private void initBoard() {
-            setBackground(Color.black);
+            setBackground(Color.WHITE);
             setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
             loadImages();
         }
         //load gambar
         private void loadImages() {
-            ImageIcon iid = new ImageIcon("dot.png");
-            ball = iid.getImage();
-            // ImageIcon iia = new ImageIcon("apple.png");
-            ImageIcon iih = new ImageIcon("head.png");
-            head = iih.getImage();
-            apple = iih.getImage();
+            ImageIcon ftail = new ImageIcon("ekor.png");
+            ImageIcon fhead = new ImageIcon("kepala.png");
+            ball = ftail.getImage();
+            head = fhead.getImage();
+            pakan = fhead.getImage();
         }
         //mulai game
         private void initGame() {
@@ -215,7 +291,7 @@ public class Snakes  {
                 y[z] = 50;
             }
             timer = new Timer(DELAY, this);
-            locateApple();
+            locatepakan();
             timer.start();
         }
         @Override
@@ -225,7 +301,7 @@ public class Snakes  {
         }
         private void doDrawing(Graphics g) {
             if (inGame) {
-                g.drawImage(apple, apple_x, apple_y, this);
+                g.drawImage(pakan, pakan_x, pakan_y, this);
                 for (int z = 0; z < dots; z++) {
                     if (z == 0) {//draw ndas
                         g.drawImage(head, x[z], y[z], this);
@@ -245,16 +321,16 @@ public class Snakes  {
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = getFontMetrics(small);
             dtk.stop();
-            g.setColor(Color.white);
+            g.setColor(Color.BLACK);
             g.setFont(small);
             g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
         }
-        private void checkApple() {
-            if ((x[0] == apple_x) && (y[0] == apple_y)) {
+        private void checkpakan() {
+            if ((x[0] == pakan_x) && (y[0] == pakan_y)) {
                 dots++;
                 score=(dots-3);
-                labelscore.setText("Score = "+score);
-                locateApple();
+                labelscore.setText(" = "+score);
+                locatepakan();
             }
         }
         private void move() {
@@ -286,21 +362,69 @@ public class Snakes  {
             if (!inGame) timer.stop();
         }
         //Random pakanan
-        private void locateApple() {
+        private void locatepakan() {
             int r = (int) (Math.random() * RAND_POS);
-            apple_x = ((r * DOT_SIZE));
+            pakan_x = ((r * DOT_SIZE));
             r = (int) (Math.random() * RAND_POS);
-            apple_y = ((r * DOT_SIZE));
+            pakan_y = ((r * DOT_SIZE));
         }
         @Override
         public void actionPerformed(ActionEvent e) {
             if (inGame) {
-                checkApple();
+                checkpakan();
                 checkCollision();
                 move();
             }
             repaint();
         }
+        
+    public void CreatePause(){
+        panelpause=new JPanel();
+        panelpause.setLayout(new FlowLayout());
+        JPanel d=new JPanel();
+        d.setLayout(new GridLayout(1,2));
+        timer.stop();
+        dtk.stop();
+        btntomenu=new JButton("Main Menu");
+        btnreset=new JButton("Replay");
+        btnresume=new JButton("Resume");
+        btntomenu.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(panelmenu);
+                frame.repaint();
+                frame.revalidate(); 
+                
+            }
+        });
+        btnreset.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inGame=true;
+                hh=0;mm=0;ss=0;
+                labeltime.setText(" = 00:00:00");
+                dtk.start();
+                uler.initGame();
+                frame.setContentPane(panelplay);
+                frame.repaint();
+                frame.revalidate(); 
+            }
+        });
+        btnresume.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setContentPane(panelplay);
+                frame.repaint();
+                frame.revalidate(); 
+                timer.start();
+                dtk.start();
+            }
+        });
+        d.add(btntomenu);
+        d.add(btnreset);
+        d.add(btnresume);
+        panelpause.add(d);
+    }
     }
     
     
@@ -336,7 +460,7 @@ public class Snakes  {
             if(e.getActionCommand().equals("PAUSE")){
                 JDialog d = new JDialog(frame,"PAUSE"); 
                 d.setLocationRelativeTo(null);
-                d.setLayout(new GridLayout(1,2));
+                d.setLayout(new GridLayout(3,1));
                 
                 timer.stop();
                 dtk.stop();
@@ -359,7 +483,7 @@ public class Snakes  {
                         d.dispose();
                         inGame=true;
                         hh=0;mm=0;ss=0;
-                        labeltime.setText("Time  = 00:00:00");
+                        labeltime.setText(" = 00:00:00");
                         dtk.start();
                         uler.initGame();
                     }
