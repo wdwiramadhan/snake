@@ -1,9 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -286,6 +282,11 @@ public class Snakes {
     
     class Uler extends JPanel implements ActionListener {
         
+        /**
+         *
+         */
+        private static final long serialVersionUID = -3105031904880398687L;
+
         public Uler() {
             //Papan uler
             initBoard();
@@ -337,13 +338,20 @@ public class Snakes {
             }
         }
         private void gameOver(Graphics g) {
-            String msg = "Game Over";
+            String msg = "Game Over. Your Score : "+score+", Played Time : "+hh+":"+mm+":"+ss;
             Font small = new Font("Helvetica", Font.BOLD, 14);
             FontMetrics metr = getFontMetrics(small);
             dtk.stop();
             g.setColor(Color.BLACK);
             g.setFont(small);
             g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+            try {
+                Image img = ImageIO.read(getClass().getResource("gomenu.png"));
+                btnpause.setIcon(new ImageIcon(img));
+              } catch (Exception ex) {
+                System.out.println(ex);
+              }
+              btnpause.setActionCommand("MENU");
         }
         private void checkpakan() {
             if ((x[0] == pakan_x) && (y[0] == pakan_y)) {
@@ -353,7 +361,6 @@ public class Snakes {
                 if(highscore<=score){
                     highscore=score;
                     hs.setText("<html>Welcome to Snake<br/>Highscore = "+highscore+"</html>");
-                    System.out.println(highscore);
                 }
                 locatepakan();
             }
@@ -413,6 +420,7 @@ public class Snakes {
         btntomenu=new JButton("Main Menu");
         btnreset=new JButton("Replay");
         btnresume=new JButton("Resume");
+        btnreset.setActionCommand("AGAIN");
         btntomenu.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -422,19 +430,7 @@ public class Snakes {
                 
             }
         });
-        btnreset.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                inGame=true;
-                hh=0;mm=0;ss=0;
-                labeltime.setText(" = 00:00:00");
-                dtk.start();
-                uler.initGame();
-                frame.setContentPane(panelplay);
-                frame.repaint();
-                frame.revalidate(); 
-            }
-        });
+        btnreset.addActionListener(new ButtonListener());
         btnresume.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -547,6 +543,35 @@ public class Snakes {
                 rightDirection = false;
                 leftDirection = false;
             }
+            if ((e.getActionCommand().equals("AGAIN"))) {
+                // try {
+                //     Image img = ImageIO.read(getClass().getResource("pause.png"));
+                //     btnpause.setIcon(new ImageIcon(img));
+                //   } catch (Exception ex) {
+                //     System.out.println(ex);
+                //   }
+                  btnpause.setActionCommand("PAUSE");
+                    inGame=true;
+                    hh=0;mm=0;ss=0;
+                    labeltime.setText(" = 00:00:00");
+                    dtk.start();
+                    uler.initGame();
+                    frame.setContentPane(panelplay);
+                    frame.repaint();
+                    frame.revalidate(); 
+                }
+            if ((e.getActionCommand().equals("MENU"))) {
+                
+                try {
+                    Image img = ImageIO.read(getClass().getResource("pause.png"));
+                    btnpause.setIcon(new ImageIcon(img));
+                  } catch (Exception ex) {
+                    System.out.println(ex);
+                  }
+                    frame.setContentPane(panelmenu);
+                    frame.repaint();
+                    frame.revalidate(); 
+                }
         } 
     }
     public static void main(String[] args) {
