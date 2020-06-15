@@ -150,6 +150,7 @@ public class Snakes {
             @Override
             public void actionPerformed(ActionEvent e) {
                     inGame=true;
+                    btnpause.setActionCommand("PAUSE");
                     // detik.start();
                     frame.setContentPane(panelplay);
                     frame.repaint();
@@ -157,8 +158,13 @@ public class Snakes {
                     uler.initGame();
                     hh=0;mm=0;ss=0;
                     
+                    upDirection = false;
+                    downDirection = false;
+                    rightDirection = true;
+                    leftDirection = false;
                     uler.setFocusable(true);
                     labeltime.setText(" = 00:00:00");
+                    labelscore.setText(" = 0");
                     dtk.start();
                 } 
         });
@@ -227,7 +233,6 @@ public class Snakes {
                 else text=text+":"+mm;
                 if(ss<10) text=text+":0"+ss;
                 else text=text+":"+ss;
-                // text=text+">";
                 labeltime.setText(" = "+text);
             }
         });
@@ -420,27 +425,6 @@ public class Snakes {
         btntomenu=new JButton("Main Menu");
         btnreset=new JButton("Replay");
         btnresume=new JButton("Resume");
-        btnreset.setActionCommand("AGAIN");
-        btntomenu.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setContentPane(panelmenu);
-                frame.repaint();
-                frame.revalidate(); 
-                
-            }
-        });
-        btnreset.addActionListener(new ButtonListener());
-        btnresume.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                frame.setContentPane(panelplay);
-                frame.repaint();
-                frame.revalidate(); 
-                timer.start();
-                dtk.start();
-            }
-        });
         d.add(btntomenu);
         d.add(btnreset);
         d.add(btnresume);
@@ -504,6 +488,11 @@ public class Snakes {
                         d.dispose();
                         inGame=true;
                         hh=0;mm=0;ss=0;
+                        upDirection = false;
+                        downDirection = false;
+                        rightDirection = true;
+                        leftDirection = false;
+                        labelscore.setText(" = 0");
                         labeltime.setText(" = 00:00:00");
                         dtk.start();
                         uler.initGame();
@@ -543,23 +532,6 @@ public class Snakes {
                 rightDirection = false;
                 leftDirection = false;
             }
-            if ((e.getActionCommand().equals("AGAIN"))) {
-                // try {
-                //     Image img = ImageIO.read(getClass().getResource("pause.png"));
-                //     btnpause.setIcon(new ImageIcon(img));
-                //   } catch (Exception ex) {
-                //     System.out.println(ex);
-                //   }
-                  btnpause.setActionCommand("PAUSE");
-                    inGame=true;
-                    hh=0;mm=0;ss=0;
-                    labeltime.setText(" = 00:00:00");
-                    dtk.start();
-                    uler.initGame();
-                    frame.setContentPane(panelplay);
-                    frame.repaint();
-                    frame.revalidate(); 
-                }
             if ((e.getActionCommand().equals("MENU"))) {
                 
                 try {
