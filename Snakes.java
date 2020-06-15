@@ -60,7 +60,7 @@ public class Snakes {
         panelrule.setLayout(new BorderLayout());
         JLabel l = new JLabel("Rules", SwingConstants.CENTER);
         JLabel desc = new JLabel(
-                "<html><div style='text-align: center;'>This game has some rules there are : </div><br/>1.<br/>2.<br/>3.<br/>4.<br/>5.<br/></html>",
+                "<html><div style='text-align: center;'>This game has some rules there are : </div><br/>1. < for turn left<br/>2. > for turn right<br/>3. ^ for turn up<br/>4. v for turn down<br/>5.When snake eat the food, it will be longer<br/>6. The game will be over if the snakes go out of area</html>",
                 SwingConstants.CENTER);
         JButton back = new JButton("Back to Main Menu");
         back.addActionListener(new ActionListener() {
